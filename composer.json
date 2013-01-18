@@ -1,0 +1,13 @@
+{
+	"name": "occitech/capistrano-recipes",
+	"description": "Several Apache/PHP related Capistrano recipes",
+	"keywords": ["capistrano","deployment","cakephp","magento"],
+	"homepage": "http://www.occi-tech.com",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Occitech",
+			"homepage": "http://www.occi-tech.com"
+		}
+	]
+}
