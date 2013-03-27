@@ -102,7 +102,7 @@ TEXT
 		set :cake_branch, ENV['BRANCH'] if ENV.has_key?('BRANCH')
 
 		# Clone if the repository does not exists
-		run "if [[ ! -d #{shared_path}/cake ]]; then cd #{shared_path} && rm -rf cake && git clone --depth 1 #{cake_repo} cake; fi"
+		run "if [ ! -d #{shared_path}/cake ]; then cd #{shared_path} && rm -rf cake && git clone --depth 1 #{cake_repo} cake; fi"
 
 		stream "cd #{shared_path}/cake && git fetch && git checkout #{cake_branch} && git pull"
 		run "#{try_sudo} rm -rf #{releases_path}/lib"
@@ -128,7 +128,7 @@ TEXT
 			end
 
 			sed_command = "sed -i '2idefine(\"CAKE_CORE_INCLUDE_PATH\",  \"#{shared_path}/cake/lib\");' #{latest_release}#{app_path}/webroot/index.php"
-			run "if [[ -d #{shared_path}/cake ]]; then #{sed_command}; fi"
+			run "if [ -d #{shared_path}/cake ]; then #{sed_command}; fi"
 	end
 
 	desc 'Blow up all the cache files CakePHP uses, ensuring a clean restart.'
