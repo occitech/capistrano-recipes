@@ -1,7 +1,7 @@
-set :app_symlinks, ["/media", "/var", "/sitemaps", "/wip"]
-set :app_shared_dirs, ["/app/etc", "/sitemaps", "/media", "/var", "/wip"]
-set :app_shared_files, ["/app/etc/local.xml"]
-set :app_path, "" # Path of the Magento app from the root of the project
+_cset (:app_symlinks) { ["/media", "/var", "/sitemaps"] }
+_cset (:app_shared_dirs) { ["/app/etc", "/sitemaps", "/media", "/var"] }
+_cset (:app_shared_files) { ["/app/etc/local.xml"] }
+_cset (:app_path) { "" } # Path of the Magento app from the root of the project
 
 namespace :mage do
 
