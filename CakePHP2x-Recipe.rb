@@ -235,7 +235,7 @@ TEXT
 
 		desc "Copying vendors from previous release"
 		task :copy_vendors, :except => { :no_release => true } do
-			run "vendorDir=#{current_path}/Vendor; if [ -d $vendorDir ] || [ -h $vendorDir ]; then cp -a $vendorDir #{latest_release}/Vendor; fi;"
+			run "vendorDir=#{current_path}/Vendor; if [ -d $vendorDir ] || [ -h $vendorDir ]; then cp -a $vendorDir #{latest_release}; fi;"
 		end
 	end
 
