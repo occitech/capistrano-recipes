@@ -19,7 +19,7 @@ _cset(:app_path) { "" } # path of your "app" directory from the base of the repo
 
 _cset(:php_bin) { "php" }
 _cset(:composer_bin) { false }
-_cset(:composer_options) { "--no-scripts --verbose --prefer-dist" }
+_cset(:composer_options) { "--no-scripts --verbose --prefer-dist --no-dev" }
 
 # Used by the interactive database creation prompt
 def defaults(val, default)
