@@ -3,6 +3,12 @@ _cset (:app_shared_dirs) { ["/app/etc", "/sitemaps", "/media", "/var"] }
 _cset (:app_shared_files) { ["/app/etc/local.xml"] }
 _cset (:app_path) { "" } # Path of the Magento app from the root of the project
 
+if exists?(copy_exclude)
+  set :copy_exclude, copy_exclude.concat(['/.git', '/config', '/downloader', '/.gitignore', '/.htaccess.sample'])
+else
+  set :copy_exclude, ['/.git', '/config', '/downloader', '/.gitignore', '/.htaccess.sample']
+end
+
 namespace :mage do
 
     desc <<-DESC
