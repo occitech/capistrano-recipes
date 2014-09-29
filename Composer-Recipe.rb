@@ -2,7 +2,7 @@ namespace :composer do
 
   _cset(:composer_bin) { false }
   _cset(:php_bin) { "php" }
-  _cset(:composer_options) { "--no-scripts --verbose --prefer-dist --no-dev" }
+  _cset(:composer_options) { "--verbose --prefer-dist --no-dev" }
 
   desc "Ensure the latest Composer version is available - Gets composer and installs it or just update"
   task :get, :roles => :app, :except => { :no_release => true } do
