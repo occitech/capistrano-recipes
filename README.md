@@ -6,7 +6,7 @@ Most of them requires the railsless-deploy gem to be installed on the machine
 
 ## Authors
 
-The [Occitech](http://www.occi-tech.com) crew
+The [Occitech](http://www.occitech.fr) crew
 
 ## Licence
 
