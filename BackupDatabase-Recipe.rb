@@ -54,6 +54,19 @@ namespace :database do
     end
   end
 
+  task :revert do
+    logger.info("Fetching database credentials from project")
+    dbCredentials = is_cakephp_project ? get_database_credentials_for_cakephp : get_database_credentials_for_magento
+
+    databaseDump = "#{previous_release}#{app_path}/#{application}.dump.sql.gz"
+
+    if File.exist?(databaseDump)
+      run "zcat #{databaseDump} | mysql -u #{dbCredentials["username"]} --password=#{dbCredentials["password"]} #{dbCredentials["dbname"]} -h #{dbCredentials["host"]}"
+    else
+      logger.important("No database backup found")
+    end
+  end
 end
 
+before "deploy:rollback:cleanup", "database:revert"
 before "deploy", "database:backup"
