@@ -31,7 +31,7 @@ end
 namespace :database do
 
   desc <<-DESC
-		Backup a database
+		Generate a backup for database project.
   DESC
   task :backup, :roles => :db, :only => { :primary => true } do
     filename = "#{application}.dump.sql.gz"
@@ -54,6 +54,9 @@ namespace :database do
     end
   end
 
+  desc <<-DESC
+		Revert a database thanks to database backup
+  DESC
   task :revert do
     logger.info("Fetching database credentials from project")
     dbCredentials = is_cakephp_project ? get_database_credentials_for_cakephp : get_database_credentials_for_magento
@@ -66,6 +69,7 @@ namespace :database do
       logger.important("No database backup found")
     end
   end
+
 end
 
 before "deploy:rollback:cleanup", "database:revert"
