@@ -38,12 +38,10 @@ namespace :database do
     file = "/tmp/#{filename}"
     on_rollback { delete file }
 
-    puts "Fetching database credentials from project"
+    logger.info("Fetching database credentials from project")
     dbCredentials = is_cakephp_project ? get_database_credentials_for_cakephp : get_database_credentials_for_magento
 
-    puts dbCredentials
-
-    puts "Dumping database"
+    logger.info("Dumping database")
     if dbCredentials.length > 0
       run "mysqldump -u #{dbCredentials["username"]} --password=#{dbCredentials["password"]} #{dbCredentials["dbname"]} -h #{dbCredentials["host"]} | bzip2 -c > #{file}"  do |ch, stream, data|
         puts data
@@ -53,7 +51,7 @@ namespace :database do
       get file, "#{shared_path}/backups/#{filename}"
       File.delete(file)
     else
-      puts "Unsupported type of project - No backup will be provided"
+      logger.important("Unsupported type of project - No backup will be provided")
     end
   end
 
