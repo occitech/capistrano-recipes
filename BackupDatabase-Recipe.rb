@@ -1,7 +1,7 @@
 require 'nokogiri'
 
 def get_database_credentials_for_magento
-  configXMLFile = Nokogiri::XML(File.open("#{latest_release}#{app_path}/app/etc/local.xml"))
+  configXMLFile = Nokogiri::XML(File.open("#{current_release}#{app_path}/app/etc/local.xml"))
   dbCredentials = Hash.new
   ["host", "username", "password", "dbname"].each do |credential|
     dbCredentials[credential] = configXMLFile.xpath("//config//global//resources//default_setup//#{credential}/text()").text
@@ -10,7 +10,7 @@ def get_database_credentials_for_magento
 end
 
 def get_database_credentials_for_cakephp
-  configFile = File.open("#{latest_release}#{app_path}/Config/database.php").read
+  configFile = File.open("#{current_release}#{app_path}/Config/database.php").read
 
   rowCredentials= configFile.scan(/'(?<key>\w+)'\s=>\s'(?<value>\w+)'/)
   dbCredentials = Hash.new
