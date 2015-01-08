@@ -34,7 +34,7 @@ namespace :database do
 		Backup a database
   DESC
   task :backup, :roles => :db, :only => { :primary => true } do
-    filename = "#{application}.dump.#{Time.now.to_i}.sql.bz2"
+    filename = "#{application}.dump.sql.gz"
     file = "/tmp/#{filename}"
     on_rollback { delete file }
 
