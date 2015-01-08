@@ -43,7 +43,7 @@ namespace :database do
 
     logger.info("Dumping database")
     if dbCredentials.length > 0
-      run "mysqldump -u #{dbCredentials["username"]} --password=#{dbCredentials["password"]} #{dbCredentials["dbname"]} -h #{dbCredentials["host"]} | bzip2 -c > #{file}"  do |ch, stream, data|
+      run "mysqldump  --add-drop-table --extended-insert --force -u #{dbCredentials["username"]} --password=#{dbCredentials["password"]} #{dbCredentials["dbname"]} -h #{dbCredentials["host"]} | gzip > #{file}"  do |ch, stream, data|
         puts data
       end
 
