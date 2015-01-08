@@ -47,8 +47,7 @@ namespace :database do
         puts data
       end
 
-      `mkdir -p #{shared_path}/backups/`
-      get file, "#{shared_path}/backups/#{filename}"
+      get file, "#{current_release}#{app_path}/#{filename}"
       File.delete(file)
     else
       logger.important("Unsupported type of project - No backup will be provided")
