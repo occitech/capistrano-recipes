@@ -1,3 +1,4 @@
+require 'nokogiri'
 _cset (:app_symlinks) { ["/media", "/var", "/sitemaps"] }
 _cset (:app_shared_dirs) { ["/app/etc", "/sitemaps", "/media", "/var"] }
 _cset (:app_shared_files) { ["/app/etc/local.xml"] }
@@ -5,6 +6,15 @@ _cset (:app_path) { "" } # Path of the Magento app from the root of the project
 _cset (:copy_exclude) { [] }
 
 set :copy_exclude, copy_exclude.concat(['/.git', '/config', '/downloader', '/.gitignore', '/.htaccess.sample'])
+
+def get_database_credentials
+    config_xml_file = Nokogiri::XML(File.open("#{current_release}#{app_path}/app/etc/local.xml"))
+    db_credentials = Hash.new
+    ["host", "username", "password", "dbname"].each do |credential|
+        db_credentials[credential] = config_xml_file.xpath("//config//global//resources//default_setup//#{credential}/text()").text
+    end
+    db_credentials
+end
 
 namespace :mage do
 
