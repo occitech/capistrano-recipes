@@ -1,3 +1,7 @@
+require 'mkmf'
+_cset(:mysqldump_bin) { find_executable "mysqldump" }
+_cset(:mysql_bin) { find_executable "mysql" }
+
 namespace :database do
 
   desc <<-DESC
@@ -13,7 +17,7 @@ namespace :database do
     end
 
     logger.info("Dumping database")
-    run "mysqldump  --add-drop-table --extended-insert --force -u #{db_credentials["username"]} --password=#{db_credentials["password"]} #{db_credentials["dbname"]} -h #{db_credentials["host"]} | gzip > #{file}"  do |ch, stream, data|
+    run "#{mysqldump_bin} --add-drop-table --extended-insert --force -u #{db_credentials["username"]} --password=#{db_credentials["password"]} #{db_credentials["dbname"]} -h #{db_credentials["host"]} | gzip > #{file}"  do |ch, stream, data|
       puts data
     end
 
@@ -33,7 +37,7 @@ namespace :database do
     unless exists?(:db_credentials)
       raise("Cannot access database for #{application}")
     end
-    run "zcat #{database_dump} | mysql -u #{db_credentials["username"]} --password=#{db_credentials["password"]} #{db_credentials["dbname"]} -h #{db_credentials["host"]}"
+    run "zcat #{database_dump} | #{mysql_bin} -u #{db_credentials["username"]} --password=#{db_credentials["password"]} #{db_credentials["dbname"]} -h #{db_credentials["host"]}"
   end
 
 end
