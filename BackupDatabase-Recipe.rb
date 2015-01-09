@@ -1,33 +1,3 @@
-require 'nokogiri'
-
-def get_database_credentials_for_magento
-  config_xml_file = Nokogiri::XML(File.open("#{current_release}#{app_path}/app/etc/local.xml"))
-  db_credentials = Hash.new
-  ["host", "username", "password", "dbname"].each do |credential|
-    db_credentials[credential] = config_xml_file.xpath("//config//global//resources//default_setup//#{credential}/text()").text
-  end
-  db_credentials
-end
-
-def get_database_credentials_for_cakephp
-  config_file = File.open("#{current_release}#{app_path}/Config/database.php").read
-
-  row_credentials= config_file.scan(/'(?<key>\w+)'\s=>\s'(?<value>\w+)'/)
-  db_credentials = Hash.new
-
-  mapping = {"login" => "username", "database" => "dbname"}
-  row_credentials.each do |key,value|
-    credential_key = mapping[key].nil? ? key : mapping[key]
-    db_credentials[credential_key] = value
-  end
-
-  db_credentials
-end
-
-def is_cakephp_project
-  exists?(:cake_migrations)
-end
-
 namespace :database do
 
   desc <<-DESC
@@ -38,8 +8,6 @@ namespace :database do
     file = "/tmp/#{filename}"
     on_rollback { delete file }
 
-    logger.info("Fetching database credentials from project")
-    db_credentials = is_cakephp_project ? get_database_credentials_for_cakephp : get_database_credentials_for_magento
 
     logger.info("Dumping database")
     if db_credentials.length > 0
@@ -58,8 +26,6 @@ namespace :database do
 		Revert a database thanks to database backup
   DESC
   task :revert do
-    logger.info("Fetching database credentials from project")
-    db_credentials = is_cakephp_project ? get_database_credentials_for_cakephp : get_database_credentials_for_magento
 
     database_dump = "#{previous_release}#{app_path}/#{application}.dump.sql.gz"
 

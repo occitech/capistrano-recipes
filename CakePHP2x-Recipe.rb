@@ -27,6 +27,21 @@ def defaults(val, default)
 	val
 end
 
+
+def get_database_credentials
+	config_file = File.open("#{current_release}#{app_path}/Config/database.php").read
+
+	row_credentials= config_file.scan(/'(?<key>\w+)'\s=>\s'(?<value>\w+)'/)
+	db_credentials = Hash.new
+
+	mapping = {"login" => "username", "database" => "dbname"}
+	row_credentials.each do |key,value|
+		credential_key = mapping[key].nil? ? key : mapping[key]
+		db_credentials[credential_key] = value
+	end
+
+	db_credentials
+end
 #########
 # Based on the following resources
 # 	- https://github.com/cakephp/cakepackages/blob/master/Config/deploy.rb
