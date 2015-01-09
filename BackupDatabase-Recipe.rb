@@ -1,27 +1,27 @@
 require 'nokogiri'
 
 def get_database_credentials_for_magento
-  configXMLFile = Nokogiri::XML(File.open("#{current_release}#{app_path}/app/etc/local.xml"))
-  dbCredentials = Hash.new
+  config_xml_file = Nokogiri::XML(File.open("#{current_release}#{app_path}/app/etc/local.xml"))
+  db_credentials = Hash.new
   ["host", "username", "password", "dbname"].each do |credential|
-    dbCredentials[credential] = configXMLFile.xpath("//config//global//resources//default_setup//#{credential}/text()").text
+    db_credentials[credential] = config_xml_file.xpath("//config//global//resources//default_setup//#{credential}/text()").text
   end
-  dbCredentials
+  db_credentials
 end
 
 def get_database_credentials_for_cakephp
-  configFile = File.open("#{current_release}#{app_path}/Config/database.php").read
+  config_file = File.open("#{current_release}#{app_path}/Config/database.php").read
 
-  rowCredentials= configFile.scan(/'(?<key>\w+)'\s=>\s'(?<value>\w+)'/)
-  dbCredentials = Hash.new
+  row_credentials= config_file.scan(/'(?<key>\w+)'\s=>\s'(?<value>\w+)'/)
+  db_credentials = Hash.new
 
   mapping = {"login" => "username", "database" => "dbname"}
-  rowCredentials.each do |key,value|
-    credentialKey = mapping[key].nil? ? key : mapping[key]
-    dbCredentials[credentialKey] = value
+  row_credentials.each do |key,value|
+    credential_key = mapping[key].nil? ? key : mapping[key]
+    db_credentials[credential_key] = value
   end
 
-  dbCredentials
+  db_credentials
 end
 
 def is_cakephp_project
@@ -39,11 +39,11 @@ namespace :database do
     on_rollback { delete file }
 
     logger.info("Fetching database credentials from project")
-    dbCredentials = is_cakephp_project ? get_database_credentials_for_cakephp : get_database_credentials_for_magento
+    db_credentials = is_cakephp_project ? get_database_credentials_for_cakephp : get_database_credentials_for_magento
 
     logger.info("Dumping database")
-    if dbCredentials.length > 0
-      run "mysqldump  --add-drop-table --extended-insert --force -u #{dbCredentials["username"]} --password=#{dbCredentials["password"]} #{dbCredentials["dbname"]} -h #{dbCredentials["host"]} | gzip > #{file}"  do |ch, stream, data|
+    if db_credentials.length > 0
+      run "mysqldump  --add-drop-table --extended-insert --force -u #{db_credentials["username"]} --password=#{db_credentials["password"]} #{db_credentials["dbname"]} -h #{db_credentials["host"]} | gzip > #{file}"  do |ch, stream, data|
         puts data
       end
 
@@ -59,12 +59,12 @@ namespace :database do
   DESC
   task :revert do
     logger.info("Fetching database credentials from project")
-    dbCredentials = is_cakephp_project ? get_database_credentials_for_cakephp : get_database_credentials_for_magento
+    db_credentials = is_cakephp_project ? get_database_credentials_for_cakephp : get_database_credentials_for_magento
 
-    databaseDump = "#{previous_release}#{app_path}/#{application}.dump.sql.gz"
+    database_dump = "#{previous_release}#{app_path}/#{application}.dump.sql.gz"
 
-    if File.exist?(databaseDump)
-      run "zcat #{databaseDump} | mysql -u #{dbCredentials["username"]} --password=#{dbCredentials["password"]} #{dbCredentials["dbname"]} -h #{dbCredentials["host"]}"
+    if File.exist?(database_dump)
+      run "zcat #{database_dump} | mysql -u #{db_credentials["username"]} --password=#{db_credentials["password"]} #{db_credentials["dbname"]} -h #{db_credentials["host"]}"
     else
       logger.important("No database backup found")
     end
