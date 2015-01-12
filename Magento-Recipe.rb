@@ -8,7 +8,8 @@ _cset (:copy_exclude) { [] }
 set :copy_exclude, copy_exclude.concat(['/.git', '/config', '/downloader', '/.gitignore', '/.htaccess.sample'])
 
 def get_database_credentials
-    config_xml_file = Nokogiri::XML(File.open("#{current_release}#{app_path}/app/etc/local.xml"))
+    config_xml = capture "cat #{current_release}#{app_path}/app/etc/local.xml"
+    config_xml_file = Nokogiri::XML(config_xml)
     db_credentials = Hash.new
     ["host", "username", "password", "dbname"].each do |credential|
         db_credentials[credential] = config_xml_file.xpath("//config//global//resources//default_setup//#{credential}/text()").text

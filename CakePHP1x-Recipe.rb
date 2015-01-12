@@ -22,7 +22,7 @@ def defaults(val, default)
 end
 
 def get_database_credentials
-	config_file = File.open("#{current_release}#{app_path}/Config/database.php").read
+	config_file = capture "cat #{current_release}#{app_path}/Config/database.php"
 
 	row_credentials= config_file.scan(/'(?<key>\w+)'\s=>\s'(?<value>\w+)'/)
 	db_credentials = Hash.new

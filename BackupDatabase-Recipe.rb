@@ -2,6 +2,11 @@ require 'mkmf'
 _cset(:mysqldump_bin) { find_executable "mysqldump" }
 _cset(:mysql_bin) { find_executable "mysql" }
 
+# http://stackoverflow.com/questions/1661586/how-can-you-check-to-see-if-a-file-exists-on-the-remote-server-in-capistrano
+def remote_file_exists?(full_path)
+  'true' ==  capture("if [ -e #{full_path} ]; then echo 'true'; fi").strip
+end
+
 namespace :database do
 
   desc <<-DESC
@@ -21,8 +26,7 @@ namespace :database do
       puts data
     end
 
-    get file, "#{current_release}#{app_path}/#{filename}"
-    File.delete(file)
+    run "mv #{file} #{current_release}#{app_path}/#{filename}"
   end
 
   desc <<-DESC
@@ -31,7 +35,7 @@ namespace :database do
   task :revert do
     database_dump = "#{previous_release}#{app_path}/#{application}.dump.sql.gz"
 
-    unless File.exist?(database_dump)
+    unless remote_file_exists?(database_dump)
       raise("No database backup found")
     end
     unless exists?(:db_credentials)
