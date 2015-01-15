@@ -45,6 +45,3 @@ namespace :database do
   end
 
 end
-
-before "deploy:rollback:cleanup", "database:revert"
-before "deploy", "database:backup"
