@@ -14,7 +14,7 @@ namespace :httpAuth do
 		Inspired from: https://gist.github.com/805879
 	DESC
 	task :protect do
-		htpasswdFile = "#{current_release}#{http_auth_path}/.htpasswd"
+		htpasswdFile = "#{latest_release}#{http_auth_path}/.htpasswd"
 		htpasswdContent = http_auth_users.inject("") { |content, user|
 			content = content + user[0] + ":" + user[1].crypt("httpauth") + "\n"
 		}
@@ -26,6 +26,6 @@ namespace :httpAuth do
 			'AuthName "Restricted"',
 			"AuthUserFile \"#{htpasswdFile}\"",
 			'Require valid-user'
-		].each { |line| run "echo '#{line}' >> #{current_release}#{http_auth_path}/.htaccess" }
+		].each { |line| run "echo '#{line}' >> #{latest_release}#{http_auth_path}/.htaccess" }
 	end
 end
