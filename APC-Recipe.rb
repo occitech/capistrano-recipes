@@ -11,7 +11,7 @@ namespace :apc do
 		This task must be triggered AFTER the deployment to clear APC cache
 	DESC
 	task :clear_cache, :roles => :app do
-		apc_file = "#{current_release}#{apc_webroot}/apc_clear.php"
+		apc_file = "#{latest_release}#{apc_webroot}/apc_clear.php"
 		curl_options = "-s"
 		if !http_auth_users.to_a.empty? then
 			curl_options = curl_options + " --user " + http_auth_users[0][0] + ":" + http_auth_users[0][1]
