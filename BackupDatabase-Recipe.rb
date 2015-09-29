@@ -1,6 +1,7 @@
 require 'mkmf'
 _cset(:mysqldump_bin) { "/usr/bin/env mysqldump" }
 _cset(:mysql_bin) { "/usr/bin/env mysql" }
+_cset(:app_path) { "" }
 
 # http://stackoverflow.com/questions/1661586/how-can-you-check-to-see-if-a-file-exists-on-the-remote-server-in-capistrano
 def remote_file_exists?(full_path)
