@@ -149,7 +149,7 @@ TEXT
 	task :clear_cache do
 		# Create TMP folders
 		run [
-			"rm -rf #{shared_path}/tmp/*",
+			"find #{shared_path}/tmp/* -type d ! -name 'logs' -print0 | xargs -0 rm -rf",
 			"rm -rf #{shared_path}/webroot/cache_css/*",
 			"rm -rf #{shared_path}/webroot/cache_js/*",
 
