@@ -139,6 +139,11 @@ namespace :mage do
         break if stream == :err
       end
     end
+
+  desc "Lauch Magento migrations / setups"
+  task :migrate, roles => :app do
+    run "cd #{current_path}#{app_path}/ && php -f index.php"
+  end
 end
 
 after   'deploy:setup', 'mage:setup'
