@@ -14,6 +14,7 @@ namespace :composer do
       run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} composer.phar self-update 1.3.1'"
     else
       run "#{try_sudo} sh -c 'cd #{latest_release} && wget -O - https://getcomposer.org/installer | #{php_bin}'"
+      run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} composer.phar self-update 1.3.1'"
     end
   end
 
