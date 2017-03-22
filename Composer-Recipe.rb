@@ -11,7 +11,7 @@ namespace :composer do
     end
 
     if 'true' == capture("if [ -e #{latest_release}/composer.phar ]; then echo 'true'; fi").strip
-      run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} composer.phar self-update'"
+      run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} composer.phar self-update 1.3.1'"
     else
       run "#{try_sudo} sh -c 'cd #{latest_release} && wget -O - https://getcomposer.org/installer | #{php_bin}'"
     end
